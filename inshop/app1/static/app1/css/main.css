@@ -1,0 +1,67 @@
+div, a, img, form, button {
+    box-sizing: border-box;
+}
+
+a {
+    text-decoration: none;
+}
+
+ul, li {
+    display: block;
+    padding: 0;
+    margin: 0;
+}
+
+.product-table {
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    border: 2px solid black;
+
+}
+
+.table-element-head{
+    display: flex;
+}
+
+.table-element-head li{
+    margin-right: 20px;
+    margin-left: 50px;
+}
+
+.table-element-head li a{
+    color: black;
+}
+
+#table-head-first-element {
+    margin-left: 80px;
+}
+
+.table-element{
+    display: flex;
+}
+
+.table-element li{
+    width: 160px;
+}
+
+.table-element li a{
+    color: black;
+}
+
+#table-element-first-element {
+    margin-left: 40px;
+}
+
+.buy-link{
+
+}
+
+.picture {
+    width: 120px;
+    height: 120px;
+}
+
+.pagination li {
+
+}

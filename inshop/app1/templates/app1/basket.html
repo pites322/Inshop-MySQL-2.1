@@ -1,0 +1,77 @@
+{% extends "app1/base.html" %}
+{% load static %}
+
+{% block head %}
+<link rel="stylesheet" type="text/css" href="{% static 'app1/css/basket.css'%}">
+<title>B&B Your basket</title>
+{% endblock %}
+{% block content %}
+<br>
+<br>
+<ul class="nav nav-tabs">
+  <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#panel1">Basket</a></li>
+  <li class="nav-item" ><a class="nav-link" data-toggle="tab" href="#panel2">History of buy</a></li>
+</ul>
+<div class="tab-content">
+  <div id="panel1" class="tab-pane fade show active">
+     <table border="2" width="100%" cellpadding="5">
+        <tr>
+            <th>Name</th>
+            <th>Data of add</th>
+            <th>Price</th>
+            <th>Is payed?</th>
+            <th>Delete</th>
+            <th>Pay</th>
+         </tr>
+       {% for prod in prod_in_bask %}
+        <tr>
+        <td>{{ prod.product_name}}</td>
+        <td>{{ prod.data_of_buy }}</td>
+        <td>{{ prod.price}} </td>
+        <td>{{ prod.payed_or_not}} </td>
+        <td><a href="{% url 'basket' pk=prod.id %}">Delete</a></td>
+        <td><a href="{% url 'product_buy_one' pk=prod.id %}">Buy only that</a></td>
+      </tr>
+        {% endfor %}
+          <tr>
+            <th></th>
+            <th>Total price</th>
+            <th>Price</th>
+            <th></th>
+            <th>Buy all</th>
+            <th>
+                <form action="{% url 'basket' %}"  method="POST">
+                    {% csrf_token %}
+                <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                data-key="pk_test_4d82ss51WQYwuCciwz4i5ude"
+                data-amount="{{ price }}"
+                data-name="Sample Charge"
+                data-description="test"
+                data-currency="usd">
+                </script>
+                </form>
+             </th>
+         </tr>
+    </table>
+  </div>
+  <div id="panel2" class="tab-pane fade">
+    <table border="2" width="100%" cellpadding="5">
+        <tr>
+            <th>Name</th>
+            <th>Data of buy</th>
+            <th>Price</th>
+            <th>Is payed?</th>
+         </tr>
+       {% for element in story %}
+        <tr>
+        <td>{{ element.product_name}}</td>
+        <td>{{ element.data_of_buy }}</td>
+        <td>{{ element.price}} </td>
+        <td>{{ element.payed_or_not}} </td>
+      </tr>
+        {% endfor %}
+    </table>
+  </div>
+</div>
+
+{% endblock %}

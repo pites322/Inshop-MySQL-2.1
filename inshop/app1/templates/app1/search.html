@@ -1,0 +1,41 @@
+{% extends 'app1/base.html' %}
+{% load bootstrap %}
+{% load bootstrap4 %}
+{% load static %}
+{% block head %}
+<title>B&B search</title>
+{% endblock %}
+{% block content %}
+    <h1>Search</h1>
+    {% if products_lists %}
+       <table border="2" width="100%" cellpadding="5">
+            <tr>
+                <th>Photo</th>
+                <th>Name</th>
+                <th>Manufacturer</th>
+                <th>Bluetooth or wire</th>
+                <th>Connection type</th>
+                <th>Price</th>
+                <th>More information</th>
+             </tr>
+            {% for prod in products_lists %}
+            <tr>
+            {% if prod.photo != 'None' %}
+                <th><img src="{{ prod.photo.url }}" class="picture" style="height: 150px; width: 150px"></th>
+            {% else %}
+                <th><img src="{% static 'images/non_img.jpg'%}" class="picture" style="height: 150px; width: 150px"></th>
+            {% endif %}
+                <th>{{ prod.name}}</th>
+                <th>{{ prod.manufacturer }}</th>
+                <th>{{ prod.bluetooth_or_wire}} </th>
+                <th>{{ prod.type_connector}} </th>
+                <th>{{ prod.price}} </th>
+                <th><a href="{% url 'product_details' pk=prod.pk %}" class="buy-link">See more</a></th>
+            </tr>
+            {% endfor %}
+        </table>
+        {% bootstrap_pagination products_lists url=last_question %}
+    {% else %}
+        <p>Nothing found<br>Try to change your request</p>
+    {% endif %}
+{% endblock %}

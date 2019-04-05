@@ -1,0 +1,13 @@
+{% extends "app1/base.html" %}
+{% load bootstrap %}
+
+{% block content %}
+<form method="post">
+
+    {% csrf_token %}
+    {{ form|bootstrap }}
+    <input type="submit" value="Register">
+
+
+</form>
+{% endblock %}

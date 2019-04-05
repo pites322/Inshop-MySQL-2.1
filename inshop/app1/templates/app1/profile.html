@@ -1,0 +1,38 @@
+{% extends "app1/base.html" %}
+
+{% block head %}
+<title>B&B Your profile</title>
+{% endblock %}
+{% block content %}
+    <br>
+<br>
+<div>
+  <table border="2" width="30%" cellpadding="10">
+    <tr>
+      <td>Your first name</td>
+      <td>{{ first_name }}</td>
+    </tr>
+    <tr>
+      <td>Your last name </td>
+      <td>{{ last_name }}</td>
+    </tr>
+    <tr>
+      <td>Your region</td>
+      <td>{{ region }} </td>
+    </tr>
+    <tr>
+      <td>Your city</td>
+      <td>{{ city }} </td>
+    </tr>
+    <tr>
+      <td>Your home address</td>
+      <td>{{ address }} </td>
+    </tr>
+    <tr>
+      <td>prefer delivery company and number of department</td>
+      <td>{{ delivery }} </td>
+    </tr>
+  </table>
+  <div><a href="{% url 'profile_correct'%}">Correct</a></div>
+</div>
+{% endblock %}

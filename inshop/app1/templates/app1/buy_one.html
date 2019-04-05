@@ -1,0 +1,67 @@
+{% extends "app1/base.html" %}
+{% load bootstrap %}
+{% load static %}
+{% block head %}
+<title>B&B buy {{ prod.name }}</title>
+{% endblock %}
+{% block content %}
+<div>
+    <br>
+    <br>
+    <img src="{{ prod.photo.url }}" style="height: 300px; width: 300px">
+    <br>
+    <br>
+    <table border="2" width="30%" cellpadding="10">
+        <tr>
+            <td>Product name</td>
+            <td>{{ prod.name }}</td>
+        </tr>
+        <tr>
+            <td>Manufacturer</td>
+            <td>{{ prod.get_manufacturer_display }}</td>
+        </tr>
+        <tr>
+            <td>Color of device</td>
+            <td>{{ prod.get_color_display }}</td>
+        </tr>
+        <tr>
+            <td>Bluetooth or wire</td>
+            <td>{{ prod.get_bluetooth_or_wire_display }}</td>
+        </tr>
+        {% if prod.bluetooth_or_wire == 'BL' %}
+        <tr>
+            <td>Conection range</td>
+            <td>{{ prod.connection_range }}</td>
+        </tr>
+        <tr>
+            <td>Work time</td>
+            <td>{{ prod.work_time }}</td>
+        </tr>
+        {% elif prod.bluetooth_or_wire == 'WR' %}
+        <tr>
+            <td>Wire length</td>
+            <td>{{ prod.wire_lenght }}m</td>
+        </tr>
+        {% endif %}
+        <tr>
+            <td>Type of connection</td>
+            <td>{{ prod.get_type_connector_display }}</td>
+        </tr>
+        <tr>
+            <td>Price</td>
+            <td>{{ prod.price }}</td>
+        </tr>
+    </table>
+    <br>
+    <form action="{% url 'product_buy_one' pk=product.id %}" method="POST">
+        {% csrf_token %}
+        <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                data-key="pk_test_4d82ss51WQYwuCciwz4i5ude"
+                data-amount="{{ price }}"
+                data-name="InShop"
+                data-description="test"
+                data-currency="usd">
+        </script>
+    </form>
+</div>
+{% endblock %}
