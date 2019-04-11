@@ -21,6 +21,13 @@ class ShoppingList (models.Model):
     product_name = models.CharField(max_length=80)
 
 
+class Color(models.Model):
+    name = models.CharField(max_length=60)
+
+    def __str__(self):
+        return self.name
+
+
 class Product(models.Model):
     MANUFACT = (
         ("SN", "Sony"),
@@ -30,14 +37,6 @@ class Product(models.Model):
         ("AP", "Apple"),
         ("SE", "Sony Ericson"),
         ("XM", "Xiaomi"),
-    )
-
-    COLOR = (
-        ("BL", "Black"),
-        ("WT", "White"),
-        ("BE", "Blue"),
-        ("GR", "Green"),
-        ("PN", "Pink"),
     )
 
     TYPE = (
@@ -55,7 +54,7 @@ class Product(models.Model):
 
     name = models.CharField(max_length=60)
     manufacturer = models.CharField(max_length=10, choices=MANUFACT)
-    color = models.CharField(max_length=10, choices=COLOR)
+    color = models.ManyToManyField(Color)
     bluetooth_or_wire = models.CharField(max_length=10, choices=TYPE)
     connection_range = models.CharField(max_length=60, blank=True, default="0")
     work_time = models.CharField(max_length=60, blank=True, default="0")
@@ -63,7 +62,11 @@ class Product(models.Model):
     wire_lenght = models.DecimalField(max_digits=4, decimal_places=1, blank=True, default="0", )
     type_connector = models.CharField(max_length=10, choices=TYPE_CONNECTOR)
     price = models.DecimalField(max_digits=6, decimal_places=2)
-    photo = models.ImageField(blank=True, upload_to="media/", default="None")
 
     def __str__(self):
         return self.name
+
+
+class Image(models.Model):
+    product_photo_connect = models.ForeignKey(Product, on_delete=models.CASCADE)
+    photo = models.ImageField(blank=True, upload_to="media/", default="None")

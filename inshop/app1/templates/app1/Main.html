@@ -22,11 +22,17 @@
          </tr>
         {% for prod in Products %}
         <tr>
-        {% if prod.photo != 'None' %}
-            <th><img src="{{ prod.photo.url }}" class="picture"></th>
-        {% else %}
-            <th><img src="{% static 'images/non_img.jpg'%}" class="picture"></th>
-        {% endif %}
+            <th>
+                {% for key, item in photos.items %}
+                    {% if item == prod.pk %}
+                        {% if key != 'None' %}
+                            <img src="{{ key }}" class="picture">
+                        {% else %}
+                            <img src="{% static 'images/non_img.jpg'%}" class="picture">
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+            </th>
             <th>{{ prod.name}}</th>
             <th>{{ prod.get_manufacturer_display }}</th>
             <th>{{ prod.get_bluetooth_or_wire_display}} </th>

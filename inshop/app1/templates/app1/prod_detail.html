@@ -8,7 +8,9 @@
 <div>
     <br>
     <br>
-    <img src="{{ prod.photo.url }}" style="height: 300px; width: 300px">
+    {% for photo in photos %}
+    <img src="{{ photo.photo.url }}" style="height: 300px; width: 300px">
+    {% endfor %}
     <br>
     <br>
     <table border="2" width="30%" cellpadding="10">
@@ -22,7 +24,10 @@
         </tr>
         <tr>
             <td>Color of device</td>
-            <td>{{ prod.get_color_display }}</td>
+            <td>{% for color in prod.color.all %}
+                {{color|linebreaks}}
+                {% endfor %}
+            </td>
         </tr>
         <tr>
             <td>Bluetooth or wire</td>

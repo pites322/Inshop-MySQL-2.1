@@ -19,13 +19,8 @@ from app1.forms import CustomUserForm
 from api.views import ProductViewSet, BasketViewSet
 from django_registration.backends.one_step.views import RegistrationView
 from django.conf.urls.static import static
-from rest_framework import routers
 from . import settings
 
-
-router = routers.DefaultRouter()
-router.register('products', ProductViewSet)
-router.register('basket', BasketViewSet)
 
 
 urlpatterns = [
@@ -36,7 +31,10 @@ urlpatterns = [
          name='django_registration_register',),
     path('accounts/', include('django_registration.backends.one_step.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
-    path('api-auth/', include('rest_framework.urls')),
-    path('api/v1/', include(router.urls)),
+    path('api/auth/', include('djoser.urls')),
+    path('api/auth/', include('djoser.urls.authtoken')),
+    path('api/auth/', include('djoser.urls.jwt')),
+    path('api/v1/products/', ProductViewSet.as_view()),
+    path('api/v1/basket/', BasketViewSet.as_view()),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) \
               + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

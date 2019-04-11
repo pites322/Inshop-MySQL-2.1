@@ -1,8 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.utils.datastructures import MultiValueDictKeyError
-from .models import Product, ShoppingList, User
+from .models import Product, ShoppingList, User, Image
 from .forms import AddBuy, ChangeWarranty, ChangeUserInformation
 from django.utils import timezone
 from django.views.generic.base import TemplateView
@@ -15,9 +14,28 @@ class HomePage(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(HomePage, self).get_context_data(**kwargs)
-        productrs = Product.objects.all()
-        current_page = Paginator(productrs, 10)
+        products = Product.objects.all()
+        context['photos'] = Image.objects.all()
+        current_page = Paginator(products, 10)
         page = self.request.GET.get('page', 1)
+        try:
+            indexlist = []
+            for page in current_page.object_list:
+                indexlist.append(page.pk)
+            start = indexlist[0]
+            end = len(indexlist) - 1
+            end = indexlist[end]
+            images = Image.objects.raw(f'SELECT * FROM app1_image WHERE product_photo_connect_id '
+                                       f'BETWEEN {start} AND {end}')
+            image_dict = {}
+            for index in indexlist:
+                for image in images:
+                    if index == image.product_photo_connect_id and index in indexlist:
+                        image_dict.update({image.photo.url: image.product_photo_connect_id})
+                        index = 0
+            context['photos'] = image_dict
+        except IndexError:
+            context['photos'] = {}
         try:
             context['Products'] = current_page.page(page)
         except PageNotAnInteger:
@@ -37,9 +55,26 @@ class Search(TemplateView):
         if question is not None:
             search_products = Product.objects.filter(name__contains=question)
             context['last_question'] = '?search=%s' % question
-            print(context['last_question'])
             current_page = Paginator(search_products, 10)
             page = self.request.GET.get('page', 1)
+            try:
+                indexlist = []
+                for page in current_page.object_list:
+                    indexlist.append(page.pk)
+                start = indexlist[0]
+                end = len(indexlist) - 1
+                end = indexlist[end]
+                images = Image.objects.raw(f'SELECT * FROM app1_image WHERE product_photo_connect_id '
+                                           f'BETWEEN {start} AND {end}')
+                image_dict = {}
+                for index in indexlist:
+                    for image in images:
+                        if index == image.product_photo_connect_id and index in indexlist:
+                            image_dict.update({image.photo.url: image.product_photo_connect_id})
+                            index = 0
+                context['photos'] = image_dict
+            except IndexError:
+                context['photos'] = {}
             try:
                 context['products_lists'] = current_page.page(page)
             except PageNotAnInteger:
@@ -69,8 +104,8 @@ class Profile(TemplateView):
 
 def product_details(request, pk):
     prod = get_object_or_404(Product, pk=pk)
+    photos = Image.objects.filter(product_photo_connect_id=pk)
     form = AddBuy()
-    photo = str(prod.photo)
     price = int(prod.price * 100)
     warr = ChangeWarranty(request.POST, instance=prod)
     if request.method == 'POST':
@@ -100,7 +135,7 @@ def product_details(request, pk):
         return redirect('bits in bytes')
     else:
         pass
-    return render(request, 'app1/prod_detail.html', {'prod': prod, 'warr': warr, 'photo': photo, 'price': price})
+    return render(request, 'app1/prod_detail.html', {'prod': prod, 'warr': warr, 'price': price, "photos": photos})
 
 
 def user_change_info(request):
@@ -159,6 +194,7 @@ def basket(request, pk=None):
 def buy_one_product(request, pk):
     product = get_object_or_404(ShoppingList, pk=pk)
     product_data = get_object_or_404(Product, pk=product.product_id)
+    photos = Image.objects.filter(product_photo_connect_id=product_data.pk)
     form = AddBuy(request.POST, instance=product)
     price = int(product_data.price * 100)
     import stripe
@@ -176,5 +212,5 @@ def buy_one_product(request, pk):
             form.data_of_buy = timezone.now()
             form.save()
         return redirect('basket')
-    return render(request, 'app1/buy_one.html', {'form': form, 'product': product,
-                                                         'prod': product_data, 'price': price})
+    return render(request, 'app1/buy_one.html', {'form': form, 'product': product, 'prod': product_data, 'price': price,
+                                                 'photos': photos})

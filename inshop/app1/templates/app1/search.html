@@ -20,11 +20,17 @@
              </tr>
             {% for prod in products_lists %}
             <tr>
-            {% if prod.photo != 'None' %}
-                <th><img src="{{ prod.photo.url }}" class="picture" style="height: 150px; width: 150px"></th>
-            {% else %}
-                <th><img src="{% static 'images/non_img.jpg'%}" class="picture" style="height: 150px; width: 150px"></th>
-            {% endif %}
+                 <th>
+                    {% for key, item in photos.items %}
+                        {% if item == prod.pk %}
+                            {% if key != 'None' %}
+                                <img src="{{ key }}" style="height: 150px; width: 150px">
+                            {% else %}
+                                <img src="{% static 'images/non_img.jpg'%}" style="height: 150px; width: 150px">
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                </th>
                 <th>{{ prod.name}}</th>
                 <th>{{ prod.manufacturer }}</th>
                 <th>{{ prod.bluetooth_or_wire}} </th>
