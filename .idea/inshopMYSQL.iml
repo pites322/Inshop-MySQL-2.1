@@ -6,6 +6,7 @@
       <sourceFolder url="file://$MODULE_DIR$/inshop/app1" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/inshop/api" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/inshopAPI" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/inshop/inshop" isTestSource="false" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

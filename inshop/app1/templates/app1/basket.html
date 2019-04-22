@@ -10,7 +10,7 @@
 <br>
 <ul class="nav nav-tabs">
   <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#panel1">Basket</a></li>
-  <li class="nav-item" ><a class="nav-link" data-toggle="tab" href="#panel2">History of buy</a></li>
+  <li class="nav-item" ><a class="nav-link" data-toggle="tab" href="#panel2">Story of buys</a></li>
 </ul>
 <div class="tab-content">
   <div id="panel1" class="tab-pane fade show active">
@@ -30,13 +30,13 @@
         <td>{{ prod.price}} </td>
         <td>{{ prod.payed_or_not}} </td>
         <td><a href="{% url 'basket' pk=prod.id %}">Delete</a></td>
-        <td><a href="{% url 'product_buy_one' pk=prod.id %}">Buy only that</a></td>
+        <td><a href="{% url 'product_buy_one' pk=prod.id %}">See more</a></td>
       </tr>
         {% endfor %}
           <tr>
             <th></th>
             <th>Total price</th>
-            <th>Price</th>
+            <th>{{user.basket_state}}</th>
             <th></th>
             <th>Buy all</th>
             <th>

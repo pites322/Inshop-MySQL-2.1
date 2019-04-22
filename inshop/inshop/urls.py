@@ -16,11 +16,10 @@ Including another URLconf
 from django.urls import include, path
 from django.contrib import admin
 from app1.forms import CustomUserForm
-from api.views import ProductViewSet, BasketViewSet
+from api.views import ProductView, BasketView
 from django_registration.backends.one_step.views import RegistrationView
 from django.conf.urls.static import static
 from . import settings
-
 
 
 urlpatterns = [
@@ -29,12 +28,12 @@ urlpatterns = [
     path('accounts/register/',
          RegistrationView.as_view(form_class=CustomUserForm),
          name='django_registration_register',),
-    path('accounts/', include('django_registration.backends.one_step.urls')),
-    path('accounts/', include('django.contrib.auth.urls')),
     path('api/auth/', include('djoser.urls')),
     path('api/auth/', include('djoser.urls.authtoken')),
     path('api/auth/', include('djoser.urls.jwt')),
-    path('api/v1/products/', ProductViewSet.as_view()),
-    path('api/v1/basket/', BasketViewSet.as_view()),
+    path('accounts/', include('django_registration.backends.one_step.urls')),
+    path('accounts/', include('django.contrib.auth.urls')),
+    path('api/v1/products/', ProductView.as_view()),
+    path('api/v1/basket/', BasketView.as_view()),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) \
               + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

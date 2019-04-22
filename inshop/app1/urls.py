@@ -11,7 +11,7 @@ urlpatterns = [
     path('account/profile/change_data', views.user_change_info, name="profile_correct"),
     path('account/basket', views.basket, name="basket"),
     path('account/basket/(<pk>)', views.basket, name="basket"),
-    path('search/', views.Search.as_view(), name='searching'),
+    path('search/', views.Search.as_view(), name="searching"),
     path('account/basket/buy_one/(<pk>)', views.buy_one_product, name="product_buy_one"),
 ]
 

@@ -15,16 +15,11 @@ class HomePage(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(HomePage, self).get_context_data(**kwargs)
         products = Product.objects.all()
-        context['photos'] = Image.objects.all()
         current_page = Paginator(products, 10)
         page = self.request.GET.get('page', 1)
         try:
-            indexlist = []
-            for page in current_page.object_list:
-                indexlist.append(page.pk)
-            start = indexlist[0]
-            end = len(indexlist) - 1
-            end = indexlist[end]
+            indexlist = [page.pk for page in current_page.object_list]
+            start, end = indexlist[0], indexlist[-1]
             images = Image.objects.raw(f'SELECT * FROM app1_image WHERE product_photo_connect_id '
                                        f'BETWEEN {start} AND {end}')
             image_dict = {}
@@ -58,12 +53,8 @@ class Search(TemplateView):
             current_page = Paginator(search_products, 10)
             page = self.request.GET.get('page', 1)
             try:
-                indexlist = []
-                for page in current_page.object_list:
-                    indexlist.append(page.pk)
-                start = indexlist[0]
-                end = len(indexlist) - 1
-                end = indexlist[end]
+                indexlist = [page.pk for page in current_page.object_list]
+                start, end = indexlist[0], indexlist[-1]
                 images = Image.objects.raw(f'SELECT * FROM app1_image WHERE product_photo_connect_id '
                                            f'BETWEEN {start} AND {end}')
                 image_dict = {}
@@ -116,7 +107,7 @@ def product_details(request, pk):
         form.price = prod.price
         form.data_of_buy = timezone.now()
         form.product_name = prod.name
-        try:
+        if 'stripeToken' in request.POST:
             import stripe
             stripe.api_key = "sk_test_KoPBXsif8wO9pa9GPKU9qsz6"
             stripe.Charge.create(
@@ -126,16 +117,15 @@ def product_details(request, pk):
                 description="Test payment",
             )
             form.payed_or_not = 'Yes'
-        except MultiValueDictKeyError:
+        else:
             form.payed_or_not = 'No'
         form.save()
         warr = warr.save()
         warr.warranty = prod.warranty - 1
         warr.save()
         return redirect('bits in bytes')
-    else:
-        pass
-    return render(request, 'app1/prod_detail.html', {'prod': prod, 'warr': warr, 'price': price, "photos": photos})
+    elif request.method == 'GET':
+        return render(request, 'app1/prod_detail.html', {'prod': prod, 'warr': warr, 'price': price, "photos": photos})
 
 
 def user_change_info(request):
@@ -146,37 +136,37 @@ def user_change_info(request):
             form = form.save(commit=False)
             form.save()
         return redirect('profile')
-    else:
+    elif request.method == 'GET':
         form = ChangeUserInformation(instance=user)
-    return render(request, 'app1/profile_correct.html', {'form': form})
+        return render(request, 'app1/profile_correct.html', {'form': form})
 
 
 def basket(request, pk=None):
     prod_in_bask = ShoppingList.objects.filter(buyer_id=request.user.id, payed_or_not='No')
     story_of_buy = ShoppingList.objects.filter(buyer_id=request.user.id, payed_or_not='Yes')
-    price = 0
-    for prod in prod_in_bask:
-        price = price + prod.price
-    price = int(price * 100)
-    if pk is not None:
-        dell_pod = ShoppingList.objects.filter(id=pk)
-        del_prod_obj = dell_pod.get()
-        prod = get_object_or_404(Product, pk=del_prod_obj.product_id)
-        dell_pod.delete()
-        warr = ChangeWarranty(request.POST, instance=prod)
-        warr = warr.save()
-        warr.warranty = prod.warranty + 1
-        warr.save()
-        return redirect('basket')
+    price = int(int(request.user.basket_state) * 100)
+    if request.method == 'GET':
+        if pk is not None:
+            dell_pod = ShoppingList.objects.filter(id=pk)
+            del_prod_obj = dell_pod.get()
+            prod = get_object_or_404(Product, pk=del_prod_obj.product_id)
+            dell_pod.delete()
+            warr = ChangeWarranty(request.POST, instance=prod)
+            warr = warr.save()
+            warr.warranty = prod.warranty + 1
+            warr.save()
+            return redirect('basket')
+        else:
+            return render(request, 'app1/basket.html',
+                          {'prod_in_bask': prod_in_bask, 'price': price, 'story': story_of_buy, })
     elif request.method == 'POST':
         import stripe
         stripe.api_key = "sk_test_KoPBXsif8wO9pa9GPKU9qsz6"
-        if request.method == 'POST':
-            stripe.Charge.create(
-                amount=price,
-                currency="usd",
-                source=request.POST['stripeToken'],
-                description="Test payment",
+        stripe.Charge.create(
+            amount=price,
+            currency="usd",
+            source=request.POST['stripeToken'],
+            description="Test payment",
             )
         for prod in prod_in_bask:
             form = AddBuy(request.POST, instance=prod)
@@ -186,9 +176,6 @@ def basket(request, pk=None):
                 form.data_of_buy = timezone.now()
                 form.save()
         return redirect('basket')
-    else:
-        pass
-    return render(request, 'app1/basket.html', {'prod_in_bask': prod_in_bask, 'price': price, 'story': story_of_buy,})
 
 
 def buy_one_product(request, pk):
@@ -206,11 +193,11 @@ def buy_one_product(request, pk):
             source=request.POST['stripeToken'],
             description="Test payment",
         )
-        if form.is_valid():
-            form = form.save(commit=False)
-            form.payed_or_not = "Yes"
-            form.data_of_buy = timezone.now()
-            form.save()
+        form = form.save(commit=False)
+        form.payed_or_not = "Yes"
+        form.data_of_buy = timezone.now()
+        form.save()
         return redirect('basket')
-    return render(request, 'app1/buy_one.html', {'form': form, 'product': product, 'prod': product_data, 'price': price,
-                                                 'photos': photos})
+    elif request.method == 'GET':
+        return render(request, 'app1/buy_one.html', {'form': form, 'product': product, 'prod': product_data,
+                                                     'price': price, 'photos': photos})
