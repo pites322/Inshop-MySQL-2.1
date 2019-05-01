@@ -24,14 +24,16 @@
             <th>Pay</th>
          </tr>
        {% for prod in prod_in_bask %}
-        <tr>
-        <td>{{ prod.product_name}}</td>
-        <td>{{ prod.data_of_buy }}</td>
-        <td>{{ prod.price}} </td>
-        <td>{{ prod.payed_or_not}} </td>
-        <td><a href="{% url 'basket' pk=prod.id %}">Delete</a></td>
-        <td><a href="{% url 'product_buy_one' pk=prod.id %}">See more</a></td>
-      </tr>
+         {% if not prod.payed_or_not %}
+             <tr>
+                <td>{{ prod.product_name}}</td>
+                <td>{{ prod.data_of_buy }}</td>
+                <td>{{ prod.price}} </td>
+                <td>Not Payed</td>
+                <td><a href="{% url 'basket' pk=prod.id %}">Delete</a></td>
+                <td><a href="{% url 'product_buy_one' pk=prod.id %}">See more</a></td>
+              </tr>
+         {% endif %}
         {% endfor %}
           <tr>
             <th></th>
@@ -62,13 +64,15 @@
             <th>Price</th>
             <th>Is payed?</th>
          </tr>
-       {% for element in story %}
-        <tr>
-        <td>{{ element.product_name}}</td>
-        <td>{{ element.data_of_buy }}</td>
-        <td>{{ element.price}} </td>
-        <td>{{ element.payed_or_not}} </td>
-      </tr>
+        {% for prod in prod_in_bask %}
+            {% if prod.payed_or_not %}
+              <tr>
+                <td>{{ prod.product_name}}</td>
+                <td>{{ prod.data_of_buy }}</td>
+                <td>{{ prod.price}} </td>
+                <td>payed </td>
+              </tr>
+            {% endif %}
         {% endfor %}
     </table>
   </div>

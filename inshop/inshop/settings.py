@@ -38,19 +38,17 @@ INSTALLED_APPS = [
     'django_summernote',
     'debug_toolbar',
     'rest_framework',
-    'rest_framework.authtoken',
     'corsheaders',
-    'djoser',
     'bootstrapform',
     'bootstrap4',
     'app1',
-    'api'
+    'api',
+    'rest_framework.authtoken'
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -150,25 +148,25 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.AllowAny',
     ),
-    'PAGE_SIZE': 10,
+    # 'PAGE_SIZE': 10,
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
     ),
-    'EXCEPTION_HANDLER': 'rest_framework_json_api.exceptions.exception_handler',
-    'DEFAULT_PAGINATION_CLASS':
-        'rest_framework_json_api.pagination.PageNumberPagination',
-    'DEFAULT_PARSER_CLASSES': (
-        'rest_framework_json_api.parsers.JSONParser',
-        'rest_framework.parsers.FormParser',
-        'rest_framework.parsers.MultiPartParser'
-    ),
-    'DEFAULT_RENDERER_CLASSES': (
-        'rest_framework_json_api.renderers.JSONRenderer',
-        'rest_framework.renderers.BrowsableAPIRenderer',
-    ),
-    'DEFAULT_METADATA_CLASS': 'rest_framework_json_api.metadata.JSONAPIMetadata',
+    # 'EXCEPTION_HANDLER': 'rest_framework_json_api.exceptions.exception_handler',
+    # 'DEFAULT_PAGINATION_CLASS':
+    #     'rest_framework_json_api.pagination.PageNumberPagination',
+    # 'DEFAULT_PARSER_CLASSES': (
+    #     'rest_framework_json_api.parsers.JSONParser',
+    #     'rest_framework.parsers.FormParser',
+    #     'rest_framework.parsers.MultiPartParser'
+    # ),
+    # 'DEFAULT_RENDERER_CLASSES': (
+    #     'rest_framework_json_api.renderers.JSONRenderer',
+    #     'rest_framework.renderers.BrowsableAPIRenderer',
+    # ),
+    # 'DEFAULT_METADATA_CLASS': 'rest_framework_json_api.metadata.JSONAPIMetadata',
 }
 
 

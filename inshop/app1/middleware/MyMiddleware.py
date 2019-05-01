@@ -18,11 +18,8 @@ class GetBasketState(MiddlewareMixin):
     def process_request(self, request):
         assert hasattr(request, 'session')
         user = SimpleLazyObject(lambda: get_user(request))
-        purchases = ShoppingList.objects.all()
+        purchases = ShoppingList.objects.filter(buyer=user.id, payed_or_not=0)
         purchase_amount = 0
-        for purchase in purchases:
-            if purchase.buyer_id == user.id and purchase.payed_or_not == "No":
-                purchase_amount = purchase_amount + purchase.price
-            else:
-                pass
+        for pur in purchases:
+            purchase_amount = purchase_amount + pur.price
         user.basket_state = purchase_amount

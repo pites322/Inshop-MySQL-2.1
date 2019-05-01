@@ -56,3 +56,18 @@ class PictureSerializer(serializers.ModelSerializer):
         model = Image
         fields = '__all__'
 
+
+class BasketSerializerAlt(serializers.ModelSerializer):
+    product = ProductInBaskSerializer(read_only=True)
+    buyer = UserSerializer(read_only=True)
+    product_id = serializers.IntegerField(write_only=True)
+    payed_or_not = serializers.BooleanField()
+
+    class Meta:
+        model = ShoppingList
+        fields = '__all__'
+
+    def create(self, validated_data):
+        validated_data.update({'buyer': self.context['request'].user})
+        buy = super(BasketSerializerAlt, self).create(validated_data)
+        return buy

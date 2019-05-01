@@ -21,15 +21,15 @@
             {% for prod in products_lists %}
             <tr>
                  <th>
-                    {% for key, item in photos.items %}
-                        {% if item == prod.pk %}
-                            {% if key != 'None' %}
-                                <img src="{{ key }}" style="height: 150px; width: 150px">
+                     {% for url, id in Images.items %}
+                        {% if id == prod.id %}
+                            {% if url %}
+                                <img src="{{ url }}"  style="height: 150px; width: 150px">
                             {% else %}
                                 <img src="{% static 'images/non_img.jpg'%}" style="height: 150px; width: 150px">
                             {% endif %}
                         {% endif %}
-                    {% endfor %}
+                     {% endfor %}
                 </th>
                 <th>{{ prod.name}}</th>
                 <th>{{ prod.manufacturer }}</th>

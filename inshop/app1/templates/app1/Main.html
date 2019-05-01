@@ -23,10 +23,10 @@
         {% for prod in Products %}
         <tr>
             <th>
-                {% for key, item in photos.items %}
-                    {% if item == prod.pk %}
-                        {% if key != 'None' %}
-                            <img src="{{ key }}" class="picture">
+                {% for url, id in Images.items %}
+                    {% if id == prod.id %}
+                        {% if url %}
+                            <img src="{{ url }}" class="picture">
                         {% else %}
                             <img src="{% static 'images/non_img.jpg'%}" class="picture">
                         {% endif %}
