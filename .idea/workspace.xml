@@ -4,30 +4,9 @@
     <bookmark url="file://$PROJECT_DIR$/inshop/app1/tests/test_models.py" line="63" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ca51647c-6180-4d3e-92db-6f91c86629c1" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/inshop/app1/static/app1/js/Main.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inshop/app1/static/app1/js/basket.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inshop/app1/static/app1/js/buy_one.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inshop/app1/static/app1/js/search.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inshop/app1/tasks.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inshop/inshop/celery.py" afterDir="false" />
+    <list default="true" id="ca51647c-6180-4d3e-92db-6f91c86629c1" name="Default" comment="seven">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/inshop/app1/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/inshop/app1/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/inshop/app1/static/app1/css/base.css" beforeDir="false" afterPath="$PROJECT_DIR$/inshop/app1/static/app1/css/base.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/inshop/app1/static/app1/css/basket.css" beforeDir="false" afterPath="$PROJECT_DIR$/inshop/app1/static/app1/css/basket.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/inshop/app1/templates/app1/Main.html" beforeDir="false" afterPath="$PROJECT_DIR$/inshop/app1/templates/app1/Main.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/inshop/app1/templates/app1/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/inshop/app1/templates/app1/base.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/inshop/app1/templates/app1/basket.html" beforeDir="false" afterPath="$PROJECT_DIR$/inshop/app1/templates/app1/basket.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/inshop/app1/templates/app1/buy_one.html" beforeDir="false" afterPath="$PROJECT_DIR$/inshop/app1/templates/app1/buy_one.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/inshop/app1/templates/app1/prod_detail.html" beforeDir="false" afterPath="$PROJECT_DIR$/inshop/app1/templates/app1/prod_detail.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/inshop/app1/templates/app1/search.html" beforeDir="false" afterPath="$PROJECT_DIR$/inshop/app1/templates/app1/search.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/inshop/app1/tests/test_models.py" beforeDir="false" afterPath="$PROJECT_DIR$/inshop/app1/tests/test_models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/inshop/app1/tests/test_urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/inshop/app1/tests/test_urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/inshop/app1/tests/test_views.py" beforeDir="false" afterPath="$PROJECT_DIR$/inshop/app1/tests/test_views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/inshop/app1/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/inshop/app1/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/inshop/app1/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/inshop/app1/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/inshop/inshop/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/inshop/inshop/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/inshop/inshop/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/inshop/inshop/settings.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -83,11 +62,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Main.html" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Main.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/inshop/app1/templates/app1/Main.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="130">
-              <caret line="31" column="34" lean-forward="true" selection-start-line="31" selection-start-column="34" selection-end-line="31" selection-end-column="34" />
+            <state relative-caret-position="79">
+              <caret line="10" column="10" selection-start-line="10" selection-start-column="10" selection-end-line="10" selection-end-column="10" />
             </state>
           </provider>
         </entry>
@@ -99,14 +78,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="urls.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="urls.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/inshop/app1/urls.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="408">
-              <caret line="24" lean-forward="true" selection-start-line="24" selection-end-line="24" />
-              <folding>
-                <element signature="e#0#37#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="34">
+              <caret line="2" column="32" lean-forward="true" selection-start-line="2" selection-start-column="32" selection-end-line="2" selection-end-column="32" />
             </state>
           </provider>
         </entry>
@@ -185,9 +161,9 @@
         <option value="$PROJECT_DIR$/inshop/app1/static/app1/css/base.css" />
         <option value="$PROJECT_DIR$/inshop/app1/static/app1/js/Main.js" />
         <option value="$PROJECT_DIR$/inshop/app1/views.py" />
-        <option value="$PROJECT_DIR$/inshop/app1/templates/app1/Main.html" />
         <option value="$PROJECT_DIR$/inshop/app1/templates/app1/search.html" />
         <option value="$PROJECT_DIR$/inshop/app1/urls.py" />
+        <option value="$PROJECT_DIR$/inshop/app1/templates/app1/Main.html" />
       </list>
     </option>
   </component>
@@ -329,7 +305,14 @@
       <option name="project" value="LOCAL" />
       <updated>1556718855330</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="seven">
+      <created>1560439939908</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1560439939908</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -339,11 +322,11 @@
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.24728589" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.50060314" side_tool="true" weight="0.32925472" />
-      <window_info anchor="bottom" id="Version Control" order="7" weight="0.32925472" />
+      <window_info active="true" anchor="bottom" id="Version Control" order="7" visible="true" weight="0.32925472" />
       <window_info anchor="bottom" id="Python Console" order="7" weight="0.32925472" />
       <window_info anchor="bottom" id="Run" order="2" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="7" sideWeight="0.49939686" visible="true" weight="0.32925472" />
+      <window_info anchor="bottom" id="Terminal" order="7" sideWeight="0.49939686" weight="0.32925472" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -360,7 +343,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="six" />
-    <option name="LAST_COMMIT_MESSAGE" value="six" />
+    <MESSAGE value="seven" />
+    <option name="LAST_COMMIT_MESSAGE" value="seven" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/inshopAPI/index.html">
@@ -680,13 +664,6 @@
         <state relative-caret-position="-248" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/inshop/app1/templates/app1/Main.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="130">
-          <caret line="31" column="34" lean-forward="true" selection-start-line="31" selection-start-column="34" selection-end-line="31" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/inshop/app1/templates/app1/search.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="85">
@@ -696,11 +673,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/inshop/app1/urls.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="408">
-          <caret line="24" lean-forward="true" selection-start-line="24" selection-end-line="24" />
-          <folding>
-            <element signature="e#0#37#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="34">
+          <caret line="2" column="32" lean-forward="true" selection-start-line="2" selection-start-column="32" selection-end-line="2" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/inshop/app1/templates/app1/Main.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="79">
+          <caret line="10" column="10" selection-start-line="10" selection-start-column="10" selection-end-line="10" selection-end-column="10" />
         </state>
       </provider>
     </entry>
