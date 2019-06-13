@@ -1,5 +1,9 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.http import QueryDict, JsonResponse
+from django.shortcuts import render, redirect, get_object_or_404, render_to_response
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.views import View
+from django.views.generic import FormView
+from django.db.models import F
 from .models import Product, ShoppingList, User, Image
 from .forms import AddBuy, ChangeWarranty, ChangeUserInformation
 from django.utils import timezone
@@ -18,8 +22,11 @@ class HomePage(TemplateView):
         page = self.request.GET.get('page', 1)
         image_dict = {}
         for elem in current_page.object_list:
-            image = elem.image_set.all()[0]
-            image_dict.update({image.photo.url: image.product_photo_connect_id})
+            try:
+                image = elem.image_set.all()[0]
+                image_dict.update({image.photo.url: image.product_photo_connect_id})
+            except IndexError:
+                pass
         context['Images'] = image_dict
         try:
             context['Products'] = current_page.page(page)
@@ -30,7 +37,7 @@ class HomePage(TemplateView):
         return context
 
 
-class Search(TemplateView):
+class Search(HomePage):
 
     template_name = "app1/search.html"
 
@@ -38,14 +45,17 @@ class Search(TemplateView):
         context = super(Search, self).get_context_data(**kwargs)
         question = self.request.GET.get('search')
         if question is not None:
-            search_products = Product.objects.prefetch_related('image_set').filter(name__contains=question)
+            products = Product.objects.prefetch_related('image_set').filter(name__contains=question)
             context['last_question'] = '?search=%s' % question
-            current_page = Paginator(search_products, 10)
+            current_page = Paginator(products, 10)
             page = self.request.GET.get('page', 1)
             image_dict = {}
             for elem in current_page.object_list:
-                image = elem.image_set.all()[0]
-                image_dict.update({image.photo.url: image.product_photo_connect_id})
+                try:
+                    image = elem.image_set.all()[0]
+                    image_dict.update({image.photo.url: image.product_photo_connect_id})
+                except IndexError:
+                    pass
             context['Images'] = image_dict
             # try:
             #     indexlist = [page.pk for page in current_page.object_list]
@@ -88,20 +98,21 @@ class Profile(TemplateView):
         return context
 
 
-def product_details(request, pk):
-    prod = get_object_or_404(Product, pk=pk)
-    photos = Image.objects.filter(product_photo_connect_id=pk)
-    form = AddBuy()
-    price = int(prod.price * 100)
-    warr = ChangeWarranty(request.POST, instance=prod)
-    if request.method == 'POST':
-        form = form.save(commit=False)
-        form.buyer = request.user
-        form.buyer_id = request.user.id
-        form.product_id = prod.id
-        form.price = prod.price
-        form.data_of_buy = timezone.now()
-        form.product_name = prod.name
+class ProductDetails(TemplateView):
+
+    template_name = 'app1/prod_detail.html'
+
+    def get_context_data(self, pk, **kwargs,):
+        context = super(ProductDetails, self).get_context_data(**kwargs)
+        prod = get_object_or_404(Product, pk=pk)
+        context['prod'] = prod
+        context['photos'] = Image.objects.filter(product_photo_connect_id=pk)
+        context['price'] = int(prod.price * 100)
+        return context
+
+    def post(self, request, pk):
+        prod = get_object_or_404(Product, pk=pk)
+        price = int(prod.price * 100)
         try:
             import stripe
             stripe.api_key = "sk_test_KoPBXsif8wO9pa9GPKU9qsz6"
@@ -111,49 +122,42 @@ def product_details(request, pk):
                 source=request.POST['stripeToken'],
                 description="Test payment",
             )
-            form.payed_or_not = 1
+            ShoppingList.objects.create(buyer=request.user, product=prod, price=prod.price, product_name=prod.name,
+                                        payed_or_not=1)
         except:
-            form.payed_or_not = 0
-        form.save()
-        warr = warr.save()
-        warr.warranty = prod.warranty - 1
-        warr.save()
+            ShoppingList.objects.create(buyer=request.user, product=prod, price=prod.price, product_name=prod.name)
+        prod.warranty -= 1
+        prod.save()
         return redirect('bits in bytes')
-    elif request.method == 'GET':
-        return render(request, 'app1/prod_detail.html', {'prod': prod, 'warr': warr, 'price': price, "photos": photos})
 
 
-def user_change_info(request):
-    user = request.user
-    if request.method == 'POST':
-        form = ChangeUserInformation(request.POST, instance=user)
-        if form.is_valid():
-            form = form.save(commit=False)
-            form.save()
+class UserChangeInfo(FormView):
+    template_name ='app1/profile_correct.html'
+    form_class = ChangeUserInformation
+
+    def get_form_kwargs(self):
+        kwargs = super(UserChangeInfo, self).get_form_kwargs()
+        kwargs['instance'] = User.objects.get(id=self.request.user.id)
+        return kwargs
+
+    def form_valid(self, form):
+        form.save()
         return redirect('profile')
-    elif request.method == 'GET':
-        form = ChangeUserInformation(instance=user)
-        return render(request, 'app1/profile_correct.html', {'form': form})
 
 
-def basket(request, pk=None):
-    prod_in_bask = ShoppingList.objects.filter(buyer_id=request.user.id)
-    price = int(request.user.basket_state) * 100
-    if request.method == 'GET':
-        if pk is not None:
-            dell_pod = ShoppingList.objects.filter(id=pk)
-            del_prod_obj = dell_pod.get()
-            prod = get_object_or_404(Product, pk=del_prod_obj.product_id)
-            dell_pod.delete()
-            warr = ChangeWarranty(request.POST, instance=prod)
-            warr = warr.save()
-            warr.warranty = prod.warranty + 1
-            warr.save()
-            return redirect('basket')
-        else:
-            return render(request, 'app1/basket.html',
-                          {'prod_in_bask': prod_in_bask, 'price': price})
-    elif request.method == 'POST':
+class Basket(TemplateView):
+
+    template_name = 'app1/basket.html'
+
+    def get_context_data(self, **kwargs,):
+        context = super(Basket, self).get_context_data(**kwargs)
+        context['prod_in_bask'] = ShoppingList.objects.filter(buyer_id=self.request.user.id).order_by('-data_of_buy')
+        context['price'] = int(self.request.user.basket_state) * 100
+        return context
+
+    def post(self, request):
+        prod_in_bask = ShoppingList.objects.filter(buyer_id=request.user.id)
+        price = int(request.user.basket_state) * 100
         try:
             import stripe
             stripe.api_key = "sk_test_KoPBXsif8wO9pa9GPKU9qsz6"
@@ -162,29 +166,65 @@ def basket(request, pk=None):
                 currency="usd",
                 source=request.POST['stripeToken'],
                 description="Test payment",
-                )
+            )
             for prod in prod_in_bask:
-                form = AddBuy(request.POST, instance=prod)
-                if form.is_valid():
-                    form = form.save(commit=False)
-                    form.payed_or_not = 1
-                    form.data_of_buy = timezone.now()
-                    form.save()
+                if not prod.payed_or_not:
+                    prod.payed_or_not = 1
+                    prod.save()
             return redirect('basket')
         except:
-            return render(request, 'app1/basket.html',
-                          {'prod_in_bask': prod_in_bask, 'price': price})
+            return redirect('basket')
 
 
-def buy_one_product(request, pk):
-    product = get_object_or_404(ShoppingList, pk=pk)
-    product_data = get_object_or_404(Product, pk=product.product_id)
-    photos = Image.objects.filter(product_photo_connect_id=product_data.pk)
-    form = AddBuy(request.POST, instance=product)
-    price = int(product_data.price * 100)
-    import stripe
-    stripe.api_key = "sk_test_KoPBXsif8wO9pa9GPKU9qsz6"
-    if request.method == 'POST':
+class BasketActions(View):
+
+    def post(self, request):
+        request_data = QueryDict(request.body)
+        prod_id, buyer_id = request_data.get('prod_id'), request_data.get('buyer_id')
+        buy = Product.objects.get(pk=prod_id)
+        buyer = User.objects.get(pk=buyer_id)
+        ShoppingList.objects.create(buyer=buyer, product=buy, price=buy.price, product_name=buy.name)
+        buy.warranty -= 1
+        buy.save()
+        return JsonResponse({'status': 'success'})
+
+    def delete(self, request):
+        request_data = QueryDict(request.body)
+        if 'pk' in request_data:
+            pk = request_data.get('pk')
+            dell_prod = ShoppingList.objects.get(pk=pk)
+            dell_prod.product.warranty += 1
+            dell_prod.product.save()
+            dell_prod.delete()
+            return JsonResponse({'status': 'success'})
+        else:
+            user_id = request_data.get('userId')
+            clear_list = [int(elem) for elem in request_data.getlist('list[]') if elem != '']
+            purchases = User.objects.get(id=user_id).shoppinglist_set.all()
+            for elem in purchases:
+                if elem.pk in clear_list:
+                    elem.delete()
+        return JsonResponse({'status': 'success'})
+
+
+class BuyOneProduct(TemplateView):
+
+    template_name = 'app1/buy_one.html'
+
+    def get_context_data(self, pk, **kwargs):
+        print(self.request)
+        context = super(BuyOneProduct, self).get_context_data(**kwargs)
+        context['product'] = get_object_or_404(ShoppingList, pk=pk)
+        context['prod'] = context['product'].product
+        context['photos'] = Image.objects.filter(product_photo_connect_id=context['prod'].pk)
+        context['price'] = int(context['prod'].price * 100)
+        return context
+
+    def post(self, request, pk):
+        buy = get_object_or_404(ShoppingList, pk=pk)
+        price = int(buy.product.price * 100)
+        import stripe
+        stripe.api_key = "sk_test_KoPBXsif8wO9pa9GPKU9qsz6"
         try:
             stripe.Charge.create(
                 amount=price,
@@ -192,13 +232,10 @@ def buy_one_product(request, pk):
                 source=request.POST['stripeToken'],
                 description="Test payment",
             )
-            form = form.save(commit=False)
-            form.payed_or_not = 1
-            form.data_of_buy = timezone.now()
-            form.save()
+            buy.payed_or_not = 1
+            buy.save()
             return redirect('basket')
         except:
-            pass
-    elif request.method == 'GET':
-        return render(request, 'app1/buy_one.html', {'form': form, 'product': product, 'prod': product_data,
-                                                     'price': price, 'photos': photos})
+            return redirect('product_buy_one')
+
+

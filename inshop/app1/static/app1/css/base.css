@@ -18,6 +18,9 @@ ul, li {
     margin: 0;
 
 }
+.basketState{
+    display:inline
+}
 .navbar-container {
     width: 90%;
     margin: 0 auto;

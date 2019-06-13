@@ -3,6 +3,7 @@
 {% load static %}
 {% block head %}
 <title>B&B buy {{ prod.name }}</title>
+<script src="{% static 'app1/js/buy_one.js'%}"></script>
 {% endblock %}
 {% block content %}
 <div>
@@ -57,16 +58,19 @@
         </tr>
     </table>
     <br>
-    <form action="{% url 'product_buy_one' pk=product.id %}" method="POST">
-        {% csrf_token %}
-        <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-                data-key="pk_test_4d82ss51WQYwuCciwz4i5ude"
-                data-amount="{{ price }}"
-                data-name="InShop"
-                data-description="test"
-                data-currency="usd">
-        </script>
-    </form>
+    <div>
+        <form action="{% url 'product_buy_one' pk=product.id %}" method="POST">
+            {% csrf_token %}
+            <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                    data-key="pk_test_4d82ss51WQYwuCciwz4i5ude"
+                    data-amount="{{ price }}"
+                    data-name="InShop"
+                    data-description="test"
+                    data-currency="usd">
+            </script>
+        </form>
+        <button class="deleteButton" data-id="{{product.pk}}" style="display: inline">delete</button>
+    </div>
 </div>
 <br>
 <br>

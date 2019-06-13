@@ -4,6 +4,7 @@
 
 {% block head %}
 <link rel="stylesheet" type="text/css" href="{% static 'app1/css/main.css'%}">
+<script src="{% static 'app1/js/Main.js'%}"></script>
 <title>B&B main</title>
 {% endblock %}
 {% block content %}
@@ -19,6 +20,7 @@
             <th>Connection type</th>
             <th>Price</th>
             <th>More information</th>
+            <th>Add to bask.</th>
          </tr>
         {% for prod in Products %}
         <tr>
@@ -39,6 +41,7 @@
             <th>{{ prod.get_type_connector_display}} </th>
             <th>{{ prod.price}} </th>
             <th><a href="{% url 'product_details' pk=prod.pk %}" class="buy-link">See more</a></th>
+            <th><button class="addButton" data-prodpk="{{prod.pk}}" data-buyerid="{{user.id}}" data-price="{{prod.price}}">add</button></th>
         </tr>
         {% endfor %}
     </table>

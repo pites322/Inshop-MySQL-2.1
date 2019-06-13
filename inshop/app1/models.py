@@ -15,7 +15,8 @@ class User(AbstractUser):
     def save(self, *args, **kwargs):
         user = super(User, self).save(*args, **kwargs)
         if not Token.objects.filter(user=self).exists():
-            Token.objects.craete(user)
+            Token.objects.create(user=self)
+
 
 
 class ShoppingList (models.Model):
@@ -70,10 +71,10 @@ class Product(models.Model):
     manufacturer = models.CharField(max_length=10, choices=MANUFACT)
     color = models.ManyToManyField(Color)
     bluetooth_or_wire = models.CharField(max_length=10, choices=TYPE)
-    connection_range = models.CharField(max_length=60, blank=True, default="0")
-    work_time = models.CharField(max_length=60, blank=True, default="0")
+    connection_range = models.CharField(max_length=60, blank=True, null=True, default="0")
+    work_time = models.CharField(max_length=60, blank=True, null=True, default="0")
     warranty = models.IntegerField()
-    wire_lenght = models.DecimalField(max_digits=4, decimal_places=1, blank=True, default="0", )
+    wire_lenght = models.DecimalField(max_digits=4, decimal_places=1, blank=True, null=True, default="0")
     type_connector = models.CharField(max_length=10, choices=TYPE_CONNECTOR)
     price = models.DecimalField(max_digits=6, decimal_places=2)
 

@@ -4,6 +4,7 @@
 {% block head %}
 <link rel="stylesheet" type="text/css" href="{% static 'app1/css/basket.css'%}">
 <title>B&B Your basket</title>
+<script src="{% static 'app1/js/basket.js'%}"></script>
 {% endblock %}
 {% block content %}
 <br>
@@ -18,32 +19,30 @@
         <tr>
             <th>Name</th>
             <th>Data of add</th>
-            <th>Price</th>
-            <th>Is payed?</th>
+            <th class="priceColumn">Price</th>
+            <th class="payedColumn">Is payed?</th>
             <th>Delete</th>
-            <th>Pay</th>
+            <th>More inf.</th>
          </tr>
        {% for prod in prod_in_bask %}
          {% if not prod.payed_or_not %}
-             <tr>
+             <tr id="raw{{prod.pk}}">
                 <td>{{ prod.product_name}}</td>
                 <td>{{ prod.data_of_buy }}</td>
-                <td>{{ prod.price}} </td>
-                <td>Not Payed</td>
-                <td><a href="{% url 'basket' pk=prod.id %}">Delete</a></td>
+                <td class="priceColumn">{{ prod.price}} </td>
+                <td class="payedColumn">Not Payed</td>
+                <td>
+                    <input type="checkbox" class="deleteCheckbox" id="deleteCheckbox{{prod.pk}}" data-id="{{prod.pk}}"></td>
                 <td><a href="{% url 'product_buy_one' pk=prod.id %}">See more</a></td>
               </tr>
          {% endif %}
         {% endfor %}
           <tr>
             <th></th>
-            <th>Total price</th>
-            <th>{{user.basket_state}}</th>
             <th></th>
-            <th>Buy all</th>
-            <th>
-                <form action="{% url 'basket' %}"  method="POST">
-                    {% csrf_token %}
+            <th class="priceColumn">Total price: {{user.basket_state}}</th>
+            <th class="payedColumn">Buy all:<form action="{% url 'basket' %}"  method="POST" class="stripeButton">
+                {% csrf_token %}
                 <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
                 data-key="pk_test_4d82ss51WQYwuCciwz4i5ude"
                 data-amount="{{ price }}"
@@ -51,8 +50,9 @@
                 data-description="test"
                 data-currency="usd">
                 </script>
-                </form>
-             </th>
+                </form></th>
+            <th><button class="deleteBut" data-userid="{{ user.id }}">Delete</button></th>
+            <th></th>
          </tr>
     </table>
   </div>

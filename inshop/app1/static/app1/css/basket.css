@@ -6,5 +6,18 @@
     display:flex;
 }
 
+
+
 .buttons li {
+}
+.payedColumn{
+    width: 20%;
+}
+
+.priceColumn{
+    width: 20%;
+}
+
+.stripeButton {
+    display:inline;
 }

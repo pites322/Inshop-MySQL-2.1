@@ -6,13 +6,14 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('', views.HomePage.as_view(), name="bits in bytes"),
-    path('product/(<pk>)/', views.product_details, name="product_details"),
+    path('product/(<int:pk>)', views.ProductDetails.as_view(), name="product_details"),
     path('account/profile/', views.Profile.as_view(), name="profile"),
-    path('account/profile/change_data', views.user_change_info, name="profile_correct"),
-    path('account/basket', views.basket, name="basket"),
-    path('account/basket/(<pk>)', views.basket, name="basket"),
+    path('account/profile/change_data', views.UserChangeInfo.as_view(), name="profile_correct"),
+    path('account/basket', views.Basket.as_view(), name="basket"),
+    path('account/basket/(<int:pk>)', views.Basket.as_view(), name="basket"),
     path('search/', views.Search.as_view(), name="searching"),
-    path('account/basket/buy_one/(<pk>)', views.buy_one_product, name="product_buy_one"),
+    path('account/basket/buy_one/(<int:pk>)', views.BuyOneProduct.as_view(), name="product_buy_one"),
+    path('basketdell/', views.BasketActions.as_view(), name="basket_actions"),
 ]
 
 
